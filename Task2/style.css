@@ -1,0 +1,38 @@
+:root {
+    --background-color: #2A2A2A;
+    --text-color: #DBDBDB;
+    --bookmark-color: #333333;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: monospace;
+    margin: 10px;
+}
+
+h1 {
+    padding: 5px;
+    margin: 10px;
+}
+
+p {
+    padding: 5px;
+    margin: 10px;
+}
+
+input {
+    padding: 5px;
+    margin: 10px;
+    margin-left: 15px;
+}
+
+#infoText {
+    padding: 5px;
+    margin: 10px;
+}
+
+#temperatureText {
+    padding: 5px;
+    margin: 10px;
+}
