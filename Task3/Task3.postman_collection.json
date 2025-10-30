@@ -1,0 +1,396 @@
+{
+	"info": {
+		"_postman_id": "5b995882-104a-4278-8b34-93a8aa04bb36",
+		"name": "Task3",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26754717"
+	},
+	"item": [
+		{
+			"name": "Summary",
+			"item": [
+				{
+					"name": "Summary",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const cities = [\"Zagreb\", \"Ljubljana\", \"Vienna\", \"Belgrade\", \"Sarajevo\", \"Budapest\", \"Boston\", \"New York City\", \"Los Angeles\", \"Denver\", \"Tokyo\", \"Taipei\", \"Cairo\", \"London\", \"Paris\", \"Madrid\", \"Amsterdam\", \"Dublin\"]",
+									"",
+									"const randomCity = cities[Math.floor(Math.random() * cities.length)];",
+									"const city = encodeURIComponent(randomCity);",
+									"",
+									"pm.variables.set(\"city\", city);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"",
+									"pm.test(\"Response has correct properties\", function () {",
+									"    const stringProperties = [",
+									"        \"type\", \"title\", \"displaytitle\", \"wikibase_item\", \"lang\", \"dir\", \"revision\", \"tid\", \"timestamp\", ",
+									"        \"description\", \"description_source\", \"extract\", \"extract_html\"",
+									"    ];",
+									"",
+									"    const objectProperties = [",
+									"        \"namespace\", \"titles\", \"thumbnail\", \"originalimage\", \"coordinates\", \"content_urls\"",
+									"    ];",
+									"",
+									"    const numberProperties = \"pageid\";",
+									"",
+									"    const coordinatesProperties = [",
+									"        \"lat\", \"lon\"",
+									"    ]",
+									"",
+									"    const titlesProperties = [",
+									"        \"canonical\", \"normalized\", \"display\"",
+									"    ]",
+									"",
+									"    const contenturlsProperties = [",
+									"        \"desktop\", \"mobile\"",
+									"    ]",
+									"",
+									"    const deviceProperties = [",
+									"        \"page\", \"revisions\", \"edit\", \"talk\"",
+									"    ]",
+									"",
+									"    stringProperties.forEach(property => {",
+									"        pm.expect(jsonData).to.have.property(property).that.is.a(\"string\");",
+									"    });",
+									"",
+									"    objectProperties.forEach(property => {",
+									"        pm.expect(jsonData).to.have.property(property).that.is.an(\"object\");",
+									"    });",
+									"",
+									"    pm.expect(jsonData).to.have.property(numberProperties).that.is.a(\"number\");",
+									"    pm.expect(jsonData.namespace).to.have.property(\"id\").that.is.a(\"number\");",
+									"    pm.expect(jsonData.namespace).to.have.property(\"text\").that.is.a(\"string\");",
+									"",
+									"    titlesProperties.forEach(property => {",
+									"        pm.expect(jsonData.titles).to.have.property(property).that.is.a(\"string\");",
+									"    });",
+									"",
+									"    pm.expect(jsonData.thumbnail).to.have.property(\"source\").that.is.a(\"string\");",
+									"    pm.expect(jsonData.thumbnail).to.have.property(\"width\").that.is.a(\"number\");",
+									"    pm.expect(jsonData.thumbnail).to.have.property(\"height\").that.is.a(\"number\");",
+									"    pm.expect(jsonData.originalimage).to.have.property(\"source\").that.is.a(\"string\");",
+									"    pm.expect(jsonData.originalimage).to.have.property(\"width\").that.is.a(\"number\");",
+									"    pm.expect(jsonData.originalimage).to.have.property(\"height\").that.is.a(\"number\");",
+									"",
+									"    coordinatesProperties.forEach(property => {",
+									"        pm.expect(jsonData.coordinates).to.have.property(property).that.is.a(\"number\");",
+									"    });",
+									"    ",
+									"    contenturlsProperties.forEach(property => {",
+									"        pm.expect(jsonData.content_urls).to.have.property(property).that.is.an(\"object\");",
+									"    });",
+									"",
+									"    deviceProperties.forEach(property => {",
+									"        pm.expect(jsonData.content_urls.desktop).to.have.property(property).that.is.a(\"string\");",
+									"    });",
+									"",
+									"    deviceProperties.forEach(property => {",
+									"        pm.expect(jsonData.content_urls.mobile).to.have.property(property).that.is.a(\"string\");",
+									"    });",
+									"",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "https://en.wikipedia.org/api/rest_v1/page/summary/{{city}}",
+							"protocol": "https",
+							"host": [
+								"en",
+								"wikipedia",
+								"org"
+							],
+							"path": [
+								"api",
+								"rest_v1",
+								"page",
+								"summary",
+								"{{city}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Summary Validation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"})",
+									"",
+									"pm.test(\"Response has correct properties\", function () {",
+									"    pm.expect(jsonData).to.have.property(\"status\").that.is.a(\"number\");",
+									"    pm.expect(jsonData).to.have.property(\"type\").that.is.a(\"string\");",
+									"    pm.expect(jsonData.type).to.equal(\"Internal error\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://en.wikipedia.org/api/rest_v1/page/summary/:city",
+							"protocol": "https",
+							"host": [
+								"en",
+								"wikipedia",
+								"org"
+							],
+							"path": [
+								"api",
+								"rest_v1",
+								"page",
+								"summary",
+								":city"
+							],
+							"variable": [
+								{
+									"key": "city",
+									"value": "erwtrwferwe"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Temperature",
+			"item": [
+				{
+					"name": "Temperature",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const cities = [\"Zagreb\", \"Ljubljana\", \"Vienna\", \"Belgrade\", \"Sarajevo\", \"Budapest\", \"Boston\", \"New York City\", \"Los Angeles\", \"Denver\", \"Tokyo\", \"Taipei\", \"Cairo\", \"London\", \"Paris\", \"Madrid\", \"Amsterdam\", \"Dublin\"]",
+									"",
+									"const randomCity = cities[Math.floor(Math.random() * cities.length)];",
+									"const city = encodeURIComponent(randomCity);",
+									"",
+									"pm.variables.set(\"city\", city);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"",
+									"pm.test(\"Response has correct properties\", function () {",
+									"    const stringProperties = [",
+									"        \"base\", \"name\"",
+									"    ];",
+									"",
+									"    const objectProperties = [",
+									"        \"coord\", \"main\", \"wind\", \"clouds\", \"sys\"",
+									"    ];",
+									"",
+									"    const numberProperties = [",
+									"        \"visibility\", \"dt\", \"timezone\", \"id\", \"cod\"",
+									"    ];",
+									"",
+									"    const mainProperties = [",
+									"        \"temp\", \"feels_like\", \"temp_min\", \"temp_max\", \"pressure\", \"humidity\", \"sea_level\", \"grnd_level\"",
+									"    ]",
+									"",
+									"    const windProperties = [",
+									"        \"speed\", \"deg\"",
+									"    ]",
+									"",
+									"    const sysProperties = [",
+									"        \"type\", \"id\", \"sunrise\", \"sunset\"",
+									"    ]",
+									"",
+									"    stringProperties.forEach(property => {",
+									"        pm.expect(jsonData).to.have.property(property).that.is.a(\"string\");",
+									"    });",
+									"",
+									"    objectProperties.forEach(property => {",
+									"        pm.expect(jsonData).to.have.property(property).that.is.an(\"object\");",
+									"    });",
+									"",
+									"    numberProperties.forEach(property => {",
+									"        pm.expect(jsonData).to.have.property(property).that.is.an(\"number\");",
+									"    });",
+									"",
+									"    pm.expect(jsonData).to.have.property(\"weather\").that.is.an(\"array\").that.is.not.empty;",
+									"",
+									"    const weather = jsonData.weather;",
+									"    weather.forEach(property => {",
+									"        pm.expect(property).to.have.property(\"id\").that.is.a(\"number\");",
+									"        pm.expect(property).to.have.property(\"main\").that.is.a(\"string\");",
+									"        pm.expect(property).to.have.property(\"description\").that.is.a(\"string\");",
+									"        pm.expect(property).to.have.property(\"icon\").that.is.a(\"string\");",
+									"    });",
+									"",
+									"    mainProperties.forEach(property => {",
+									"        pm.expect(jsonData.main).to.have.property(property).that.is.a(\"number\");",
+									"    });",
+									"",
+									"    windProperties.forEach(property => {",
+									"        pm.expect(jsonData.wind).to.have.property(property).that.is.a(\"number\");",
+									"    });",
+									"",
+									"    pm.expect(jsonData.clouds).to.have.property(\"all\").that.is.a(\"number\");",
+									"",
+									"    pm.expect(jsonData.sys).to.have.property(\"country\").that.is.a(\"string\");",
+									"    sysProperties.forEach(property => {",
+									"        pm.expect(jsonData.sys).to.have.property(property).that.is.a(\"number\");",
+									"    });",
+									"",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://api.openweathermap.org/data/2.5/weather?q={{city}}&APPID=edd37c4166e8b8651bed58227ace9511",
+							"protocol": "http",
+							"host": [
+								"api",
+								"openweathermap",
+								"org"
+							],
+							"path": [
+								"data",
+								"2.5",
+								"weather"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "{{city}}"
+								},
+								{
+									"key": "APPID",
+									"value": "edd37c4166e8b8651bed58227ace9511"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Temperature Validation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"})",
+									"",
+									"pm.test(\"Response has correct properties\", function () {",
+									"    pm.expect(jsonData).to.have.property(\"cod\").that.is.a(\"string\");",
+									"    pm.expect(jsonData).to.have.property(\"message\").that.is.a(\"string\");",
+									"    pm.expect(jsonData.message).to.equal(\"city not found\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://api.openweathermap.org/data/2.5/weather?q=werwrewerrewwe&APPID=edd37c4166e8b8651bed58227ace9511",
+							"protocol": "http",
+							"host": [
+								"api",
+								"openweathermap",
+								"org"
+							],
+							"path": [
+								"data",
+								"2.5",
+								"weather"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "werwrewerrewwe"
+								},
+								{
+									"key": "APPID",
+									"value": "edd37c4166e8b8651bed58227ace9511"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
