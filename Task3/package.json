@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "test-summary": "newman run ./Task3.postman_collection.json --folder 'Summary'",
+    "test-temp": "newman run ./Task3.postman_collection.json --folder 'Temperature'",
+    "test": "newman run ./Task3.postman_collection.json"
+  },
+  "dependencies": {
+    "newman": "^6.2.1"
+  }
+}
